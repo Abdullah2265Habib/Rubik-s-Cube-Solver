@@ -1,0 +1,173 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Other\\Workspace\\VS\\rubiks cube\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\moves.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:moves.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\moves.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:moves.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:firstLayer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:algorithms.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\utils.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:utils.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:firstLayer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:algorithms.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|D:\\Other\\Workspace\\VS\\rubiks cube\\utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9437BA75-8E6D-4820-9C61-FA16EEDA3D49}|rubiks cube.vcxproj|solutionrelative:utils.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\main.cpp",
+              "RelativeDocumentMoniker": "main.cpp",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\main.cpp",
+              "RelativeToolTip": "main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAgwBYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T12:59:50.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "utils.cpp",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\utils.cpp",
+              "RelativeDocumentMoniker": "utils.cpp",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\utils.cpp",
+              "RelativeToolTip": "utils.cpp",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAAAG4AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T12:59:03.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "utils.h",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\utils.h",
+              "RelativeDocumentMoniker": "utils.h",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\utils.h",
+              "RelativeToolTip": "utils.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-05T12:58:46.228Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "firstLayer.cpp",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.cpp",
+              "RelativeDocumentMoniker": "firstLayer.cpp",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.cpp",
+              "RelativeToolTip": "firstLayer.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T12:58:34.795Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "firstLayer.h",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.h",
+              "RelativeDocumentMoniker": "firstLayer.h",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\firstLayer.h",
+              "RelativeToolTip": "firstLayer.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAACGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-05T12:58:10.84Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "algorithms.cpp",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.cpp",
+              "RelativeDocumentMoniker": "algorithms.cpp",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.cpp",
+              "RelativeToolTip": "algorithms.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T12:57:52.399Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "algorithms.h",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.h",
+              "RelativeDocumentMoniker": "algorithms.h",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\algorithms.h",
+              "RelativeToolTip": "algorithms.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-05T12:57:30.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "moves.cpp",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\moves.cpp",
+              "RelativeDocumentMoniker": "moves.cpp",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\moves.cpp",
+              "RelativeToolTip": "moves.cpp",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAgwBoBAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T12:57:16.868Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "moves.h",
+              "DocumentMoniker": "D:\\Other\\Workspace\\VS\\rubiks cube\\moves.h",
+              "RelativeDocumentMoniker": "moves.h",
+              "ToolTip": "D:\\Other\\Workspace\\VS\\rubiks cube\\moves.h",
+              "RelativeToolTip": "moves.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-05T12:56:52.73Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
