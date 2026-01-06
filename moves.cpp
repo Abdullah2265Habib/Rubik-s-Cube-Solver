@@ -1,6 +1,6 @@
 #include "moves.h"
 #include <algorithm>
-
+#include "utils.h"
 string R(char green[3][3], char white[3][3], char yellow[3][3],
     char red[3][3], char orange[3][3], char blue[3][3]) {
 
@@ -254,23 +254,24 @@ string y_prime(char green[3][3], char white[3][3], char yellow[3][3],
         for (int j = 0; j < 3; j++)
             orange[i][j] = temp[i][j];
 
-    // rotate up (yellow) clockwise
+    // rotate up (yellow) counterclockwise
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
-            temp[i][j] = yellow[2 - j][i];
+            temp[i][j] = yellow[j][2 - i];
 
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
             yellow[i][j] = temp[i][j];
 
-    // rotate down (white) counterclockwise
+    // rotate down (white) clockwise
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
-            temp[i][j] = white[j][2 - i];
+            temp[i][j] = white[2 - j][i];
 
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
             white[i][j] = temp[i][j];
+
 
     return "y'";
 }

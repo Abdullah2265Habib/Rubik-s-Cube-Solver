@@ -1,6 +1,6 @@
 #ifndef MOVES_H
 #define MOVES_H
-
+#include "utils.h"
 #include <string>
 using namespace std;
 const int size = 3;

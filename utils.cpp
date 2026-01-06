@@ -25,6 +25,7 @@ void displayCube(char green[3][3], char white[3][3], char yellow[3][3], char red
 		cout << "\n\t\t _____________\n";
 
 	}
+	cout << "\n";
 	for (int i = 0; i < 3; i++) {
 		cout << "  | ";
 		for (int j = 0; j < 3; j++) {
@@ -44,7 +45,7 @@ void displayCube(char green[3][3], char white[3][3], char yellow[3][3], char red
 		}
 		cout << "\n  __________________________________________________________\n";
 	}
-	cout << "\t\t | ";
+	cout << "\n\t\t | ";
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			cout << white[i][j] << " | ";
@@ -53,6 +54,7 @@ void displayCube(char green[3][3], char white[3][3], char yellow[3][3], char red
 		if (i < 3 - 1)
 			cout << "\t\t | ";
 	}
+	cout << "\n\n";
 }
 
 
