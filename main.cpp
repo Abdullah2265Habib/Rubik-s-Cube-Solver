@@ -17,9 +17,9 @@ int main() {
     input(orange);
     input(blue);
     displayCube(green, white, yellow, red, orange, blue);
-    firstLayer(green, white, yellow, red, orange, blue);
-    //U(green, white, yellow, red, orange, blue);
-    //displayCube(green, white, yellow, red, orange, blue);
+    //firstLayer(green, white, yellow, red, orange, blue);
+    M(green, white, yellow, red, orange, blue);
+    displayCube(green, white, yellow, red, orange, blue);
     system("pause");
     return 0;
 }

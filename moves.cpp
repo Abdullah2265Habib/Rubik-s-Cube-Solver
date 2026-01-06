@@ -1,8 +1,7 @@
 #include "moves.h"
 #include <algorithm>
 #include "utils.h"
-string R(char green[3][3], char white[3][3], char yellow[3][3],
-    char red[3][3], char orange[3][3], char blue[3][3]) {
+string R(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
 
     R_prime(green, white, yellow, red, orange, blue);
     R_prime(green, white, yellow, red, orange, blue);
@@ -11,8 +10,7 @@ string R(char green[3][3], char white[3][3], char yellow[3][3],
     return "R";
 }
 
-string L(char green[3][3], char white[3][3], char yellow[3][3],
-    char red[3][3], char orange[3][3], char blue[3][3]) {
+string L(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
 
     char temp[3];
 
@@ -77,14 +75,14 @@ string R_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3
 
     return "R'";
 }
+
 string L_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
     L(green, white, yellow, red, orange, blue);
     L(green, white, yellow, red, orange, blue);
     L(green, white, yellow, red, orange, blue);
     return "L'";
 }
-string F(char green[3][3], char white[3][3], char yellow[3][3],
-    char red[3][3], char orange[3][3], char blue[3][3]) {
+string F(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
 
     // rotate green face clockwise
     char temp_face[3][3];
@@ -115,7 +113,6 @@ string F(char green[3][3], char white[3][3], char yellow[3][3],
 
     return "F";
 }
-
 
 string F_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
     F(green, white, yellow, red, orange, blue);
@@ -165,8 +162,7 @@ string U_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3
     return "U'";
 }
 
-string x(char green[3][3], char white[3][3], char yellow[3][3],
-    char red[3][3], char orange[3][3], char blue[3][3]) {
+string x(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
 
     char temp[3][3];
 
@@ -215,7 +211,6 @@ string x(char green[3][3], char white[3][3], char yellow[3][3],
     return "x";
 }
 
-
 string x_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
     // Rotate entire cube around x-axis counterclockwise (equivalent to three x moves)
     x(green, white, yellow, red, orange, blue);
@@ -224,8 +219,7 @@ string x_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3
     return "x'";
 }
 
-string y_prime(char green[3][3], char white[3][3], char yellow[3][3],
-    char red[3][3], char orange[3][3], char blue[3][3]) {
+string y_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
 
     char temp[3][3];
 
@@ -276,11 +270,45 @@ string y_prime(char green[3][3], char white[3][3], char yellow[3][3],
     return "y'";
 }
 
-
 string y(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
     // Rotate entire cube around y-axis counterclockwise (equivalent to three y moves)
     y_prime(green, white, yellow, red, orange, blue);
     y_prime(green, white, yellow, red, orange, blue);
     y_prime(green, white, yellow, red, orange, blue);
     return "y";
+}
+
+string M_prim(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3])
+{
+    char temp[3];
+
+    // save yellow middle column
+    for (int i = 0; i < 3; i++)
+        temp[i] = yellow[i][1];
+
+    // yellow <- green
+    for (int i = 0; i < 3; i++)
+        yellow[i][1] = green[i][1];
+
+    // green <- white
+    for (int i = 0; i < 3; i++)
+        green[i][1] = white[i][1];
+
+    // white <- blue (reversed)
+    for (int i = 0; i < 3; i++)
+        white[i][1] = blue[2 - i][1];
+
+    // blue <- old yellow (reversed)
+    for (int i = 0; i < 3; i++)
+        blue[i][1] = temp[2 - i];
+
+    return "M'";
+}
+
+string M(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
+    M_prime(green, white, yellow, red, orange, blue);
+    M_prime(green, white, yellow, red, orange, blue);
+    M_prime(green, white, yellow, red, orange, blue);
+
+    return "M";
 }

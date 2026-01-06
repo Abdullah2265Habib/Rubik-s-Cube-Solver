@@ -18,4 +18,7 @@ string F_prime(char g[3][3], char w[3][3], char y[3][3], char r[3][3], char o[3]
 string x_prime(char g[3][3], char w[3][3], char y[3][3], char r[3][3], char o[3][3], char b[3][3]);
 string y_prime(char g[3][3], char w[3][3], char y[3][3], char r[3][3], char o[3][3], char b[3][3]);
 
+string M(char g[3][3], char w[3][3], char y[3][3], char r[3][3], char o[3][3], char b[3][3]);
+string M_prime(char g[3][3], char w[3][3], char y[3][3], char r[3][3], char o[3][3], char b[3][3]);
+
 #endif
