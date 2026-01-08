@@ -29,7 +29,7 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
     //white on top
     int rotationCount = 0;
     while (!checkFirstLayerEdge(green, white, yellow, red, orange, blue)) {
-        
+
         if (yellow[2][1] == 'w') {
             if (green[0][1] == green[1][1]) {
                 F(green, white, yellow, red, orange, blue);
@@ -46,9 +46,52 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
             U(green, white, yellow, red, orange, blue);
         }
 
-        else {
+        else if (green[0][1] == 'w' || red[0][1] == 'w' || orange[0][1] == 'w' || blue[0][1] == 'w') {
+            if (yellow[2][1] == green[1][1] && green[0][1] == 'w') {
+                M_prime(green, white, yellow, red, orange, blue);
+                U(green, white, yellow, red, orange, blue);
+                M(green, white, yellow, red, orange, blue);
+                y(green, white, yellow, red, orange, blue);
+                continue;
+            }
 
+            else if (yellow[2][1] == red[1][1] && green[0][1] == 'w') {
+                U(green, white, yellow, red, orange, blue);
+                y_prime(green, white, yellow, red, orange, blue);
+                continue;
+
+            }
+
+            else if (yellow[2][1] == orange[1][1] && green[0][1] == 'w') {
+                U_prime(green, white, yellow, red, orange, blue);
+                y(green, white, yellow, red, orange, blue);
+                continue;
+            }
+
+            else if (green[0][1] == 'w') {
+                U(green, white, yellow, red, orange, blue);
+                U(green, white, yellow, red, orange, blue);
+                y(green, white, yellow, red, orange, blue);
+                y(green, white, yellow, red, orange, blue);
+                continue;
+            }
+            else if (red[0][1] == 'w') {
+                U_prime(green, white, yellow, red, orange, blue);
+                continue;
+            }
+            else if (orange[0][1] == 'w') {
+                U(green, white, yellow, red, orange, blue);
+            }
+            else {
+                U(green, white, yellow, red, orange, blue);
+                U(green, white, yellow, red, orange, blue);
+                continue;
+            }
         }
+        else if (green[1][0] == 'w' || green[1][2] == 'w' || red[1][0] == 'w' || red[1][2] == 'w' || orange[1][0] == 'w' || orange[1][2] == 'w' || blue[1][0] == 'w' || blue[1][2] == 'w') {
+            
+        }
+
     }
 }
 

@@ -278,7 +278,7 @@ string y(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], 
     return "y";
 }
 
-string M_prim(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3])
+string M_prime(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3])
 {
     char temp[3];
 
