@@ -10,26 +10,17 @@ void firstLayer(char green[3][3], char white[3][3], char yellow[3][3], char red[
     solveWhiteCorners(green, white, yellow, red, orange, blue);
 
     if (checkWhiteSide(green, white, yellow, red, orange, blue)) {
-
+        //move to second layer
     }
-    
-}
-
-bool checkFirstLayerCorner(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
-    if (green[2][2] == green[1][1] && white[0][2] == white[1][1] && orange[2][0] == orange[1][1] &&
-        green[2][0] == green[1][1] && white[0][0] == white[1][1] && red[2][2] == red[1][1] &&
-        orange[2][2] == orange[1][1] && white[2][2] == white[1][1] && blue[2][0] == blue[1][1] &&
-        red[2][0] == red[1][1] && white[2][0] == white[1][1] && blue[2][2] == blue[1][1])
-        return true;
-
-    return false;
+    else
+        cout << "error";
 }
 
 void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
-    //white on top
     int rotationCount = 0;
     while (!checkFirstLayerEdge(green, white, yellow, red, orange, blue)) {
 
+        //white on top-front edge upwards
         if (yellow[2][1] == 'w') {
             if (green[0][1] == green[1][1]) {
                 F(green, white, yellow, red, orange, blue);
@@ -41,11 +32,12 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
                 continue;
             }
         }
-
+        //white on top
         else if (yellow[0][1] == 'w' || yellow[1][0] == 'w' || yellow[1][2] == 'w') {
             U(green, white, yellow, red, orange, blue);
         }
 
+        //white in middle layer
         else if (green[0][1] == 'w' || red[0][1] == 'w' || orange[0][1] == 'w' || blue[0][1] == 'w') {
             if (yellow[2][1] == green[1][1] && green[0][1] == 'w') {
                 M_prime(green, white, yellow, red, orange, blue);
@@ -89,7 +81,67 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
             }
         }
         else if (green[1][0] == 'w' || green[1][2] == 'w' || red[1][0] == 'w' || red[1][2] == 'w' || orange[1][0] == 'w' || orange[1][2] == 'w' || blue[1][0] == 'w' || blue[1][2] == 'w') {
-            
+            //white on front face
+            if (green[1][0] == 'w' && red[1][2] == red[1][1]) {
+                L(green, white, yellow, red, orange, blue);
+                continue;
+            }
+            else if (green[1][0] == 'w') {
+                L_primeU_primeLU(green, white, yellow, red, orange, blue);
+                continue;
+            }
+            else if (green[1][2] == 'w' && orange[1][0] == orange[1][1]) {
+                R_prime(green, white, yellow, red, orange, blue);
+                continue;
+            }
+            else if (green[1][2] == 'w') {
+                RUR_primeU_prime(green, white, yellow, red, orange, blue);
+                continue;
+            }
+
+            //white on right-side
+            else if(red[1][2] == 'w' || red[1][0] == 'w') {
+                if (red[1][2] == 'w') {
+                    if (green[1][0] == green[1][1]) {
+                        F_prime(green ,white, yellow, red, orange, blue);
+                        continue;
+                    }
+                    else {
+                        L_primeU_primeLU(green, white, yellow, red, orange, blue);
+                        continue;
+                    }
+                }
+                else {
+                    y_prime(green, white, yellow, red, orange, blue);
+                    continue;
+                }
+            }
+
+            //white on left-side
+            else if (orange[1][0] == 'w' || orange[1][2] == 'w') {
+                if (red[1][0] == 'w') {
+                    if (green[1][2] == green[1][1]) {
+                        F(green, white, yellow, red, orange, blue);
+                        continue;
+                    }
+                    else {
+                        RUR_primeU_prime(green, white, yellow, red, orange, blue);
+                        continue;
+                    }
+                }
+                else {
+                    y(green, white, yellow, red, orange, blue);
+                    continue;
+                }
+            }
+
+            //white on back
+            else {
+                y(green, white, yellow, red, orange, blue);
+                y(green, white, yellow, red, orange, blue);
+                continue;
+            }
+
         }
 
     }
@@ -180,6 +232,16 @@ bool checkFirstLayerEdge(char green[3][3], char white[3][3], char yellow[3][3], 
         white[2][1] == white[1][1] && blue[2][1] == blue[1][1]) {
         return true;
     }
+
+    return false;
+}
+
+bool checkFirstLayerCorner(char green[3][3], char white[3][3], char yellow[3][3], char red[3][3], char orange[3][3], char blue[3][3]) {
+    if (green[2][2] == green[1][1] && white[0][2] == white[1][1] && orange[2][0] == orange[1][1] &&
+        green[2][0] == green[1][1] && white[0][0] == white[1][1] && red[2][2] == red[1][1] &&
+        orange[2][2] == orange[1][1] && white[2][2] == white[1][1] && blue[2][0] == blue[1][1] &&
+        red[2][0] == red[1][1] && white[2][0] == white[1][1] && blue[2][2] == blue[1][1])
+        return true;
 
     return false;
 }
