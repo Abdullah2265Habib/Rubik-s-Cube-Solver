@@ -25,112 +25,104 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
             if (green[0][1] == green[1][1]) {
                 F(green, white, yellow, red, orange, blue);
                 F(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
             }
             else {
                 U_prime(green, white, yellow, red, orange, blue);
                 y(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
         }
         //white on top
         else if (yellow[0][1] == 'w' || yellow[1][0] == 'w' || yellow[1][2] == 'w') {
             U(green, white, yellow, red, orange, blue);
+            displayCube(green, white, yellow, red, orange, blue);
+            continue;
         }
 
-        //white in middle layer
         else if (green[0][1] == 'w' || red[0][1] == 'w' || orange[0][1] == 'w' || blue[0][1] == 'w') {
             if (yellow[2][1] == green[1][1] && green[0][1] == 'w') {
-                M_prime(green, white, yellow, red, orange, blue);
                 U(green, white, yellow, red, orange, blue);
+                M_prime(green, white, yellow, red, orange, blue);
+                U_prime(green, white, yellow, red, orange, blue);
                 M(green, white, yellow, red, orange, blue);
                 y(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
-            }
-
-            else if (yellow[2][1] == red[1][1] && green[0][1] == 'w') {
-                U(green, white, yellow, red, orange, blue);
-                y_prime(green, white, yellow, red, orange, blue);
-                continue;
-
-            }
-
-            else if (yellow[2][1] == orange[1][1] && green[0][1] == 'w') {
-                U_prime(green, white, yellow, red, orange, blue);
-                y(green, white, yellow, red, orange, blue);
-                continue;
-            }
-
-            else if (green[0][1] == 'w') {
-                U(green, white, yellow, red, orange, blue);
-                U(green, white, yellow, red, orange, blue);
-                y(green, white, yellow, red, orange, blue);
-                y(green, white, yellow, red, orange, blue);
-                continue;
-            }
-            else if (red[0][1] == 'w') {
-                U_prime(green, white, yellow, red, orange, blue);
-                continue;
-            }
-            else if (orange[0][1] == 'w') {
-                U(green, white, yellow, red, orange, blue);
             }
             else {
-                U(green, white, yellow, red, orange, blue);
-                U(green, white, yellow, red, orange, blue);
-                continue;
+                if (green[0][1] == 'w') {
+                    U_prime(green, white, yellow, red, orange, blue);
+                    y(green, white, yellow, red, orange, blue);
+                    continue;
+                }
+                U_prime(green, white, yellow, red, orange, blue);
             }
         }
+        
+        //white in middle layer
         else if (green[1][0] == 'w' || green[1][2] == 'w' || red[1][0] == 'w' || red[1][2] == 'w' || orange[1][0] == 'w' || orange[1][2] == 'w' || blue[1][0] == 'w' || blue[1][2] == 'w') {
             //white on front face
             if (green[1][0] == 'w' && red[1][2] == red[1][1]) {
                 L(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
             else if (green[1][0] == 'w') {
                 L_primeU_primeLU(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
             else if (green[1][2] == 'w' && orange[1][0] == orange[1][1]) {
                 R_prime(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
             else if (green[1][2] == 'w') {
                 RUR_primeU_prime(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
 
-            //white on right-side
+            //white on left-side
             else if(red[1][2] == 'w' || red[1][0] == 'w') {
                 if (red[1][2] == 'w') {
                     if (green[1][0] == green[1][1]) {
                         F_prime(green ,white, yellow, red, orange, blue);
+                        displayCube(green, white, yellow, red, orange, blue);
                         continue;
                     }
                     else {
                         L_primeU_primeLU(green, white, yellow, red, orange, blue);
+                        displayCube(green, white, yellow, red, orange, blue);
                         continue;
                     }
                 }
                 else {
                     y_prime(green, white, yellow, red, orange, blue);
+                    displayCube(green, white, yellow, red, orange, blue);
                     continue;
                 }
             }
 
-            //white on left-side
+            //white on right-side
             else if (orange[1][0] == 'w' || orange[1][2] == 'w') {
-                if (red[1][0] == 'w') {
+                if (orange[1][0] == 'w') {
                     if (green[1][2] == green[1][1]) {
                         F(green, white, yellow, red, orange, blue);
+                        displayCube(green, white, yellow, red, orange, blue);
                         continue;
                     }
                     else {
                         RUR_primeU_prime(green, white, yellow, red, orange, blue);
+                        displayCube(green, white, yellow, red, orange, blue);
                         continue;
                     }
                 }
                 else {
                     y(green, white, yellow, red, orange, blue);
+                    displayCube(green, white, yellow, red, orange, blue);
                     continue;
                 }
             }
@@ -139,11 +131,37 @@ void solveWhiteEdges(char green[3][3], char white[3][3], char yellow[3][3], char
             else {
                 y(green, white, yellow, red, orange, blue);
                 y(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
                 continue;
             }
 
-        }
+            //white on bottom
 
+
+        }
+        else {
+            if (white[0][1] == white[1][1]) {
+                if (green[2][1] == green[1][1]) {
+                    y(green, white, yellow, red, orange, blue);
+                    displayCube(green, white, yellow, red, orange, blue);
+                    continue;
+                }
+                else {
+                    F(green, white, yellow, red, orange, blue);
+                    F(green, white, yellow, red, orange, blue);
+                    displayCube(green, white, yellow, red, orange, blue);
+                    continue;
+                }
+            }
+            else {
+                M_prime(green, white, yellow, red, orange, blue);
+                U(green, white, yellow, red, orange, blue);
+                M(green, white, yellow, red, orange, blue);
+                U_prime(green, white, yellow, red, orange, blue);
+                displayCube(green, white, yellow, red, orange, blue);
+                continue;
+            }
+        }
     }
 }
 
