@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube Solver - CFOP Method</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rubik's Cube Solver</h1>
+            <p>CFOP Method Solver</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <h2>Enter Cube State</h2>
+                <p>Enter the cube state as 54 characters (9 per face):</p>
+                <p>Format: Green (9) + White (9) + Yellow (9) + Red (9) + Orange (9) + Blue (9)</p>
+                <textarea id="cubeInput" placeholder="Enter 54 characters representing the cube state" rows="6" cols="60"></textarea>
+                <div class="button-group">
+                    <button onclick="solveCube()">Solve Cube</button>
+                    <button onclick="clearOutput()">Clear</button>
+                </div>
+            </div>
+
+            <div class="moves-section">
+                <h2>Manual Moves</h2>
+                <div class="button-grid">
+                    <button onclick="performMoveAndDisplay('R')">R</button>
+                    <button onclick="performMoveAndDisplay('L')">L</button>
+                    <button onclick="performMoveAndDisplay('U')">U</button>
+                    <button onclick="performMoveAndDisplay('F')">F</button>
+                    <button onclick="performMoveAndDisplay('R\'')">R'</button>
+                    <button onclick="performMoveAndDisplay('L\'')">L'</button>
+                    <button onclick="performMoveAndDisplay('U\'')">U'</button>
+                    <button onclick="performMoveAndDisplay('F\'')">F'</button>
+                    <button onclick="performMoveAndDisplay('x')">x</button>
+                    <button onclick="performMoveAndDisplay('y')">y</button>
+                    <button onclick="performMoveAndDisplay('M')">M</button>
+                    <button onclick="performMoveAndDisplay('M\'')">M'</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h2>Output</h2>
+                <pre id="output"></pre>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Rubik's Cube Solver. Converted from C++ to JavaScript.</p>
+        </footer>
+    </div>
+
+    <!-- Script imports -->
+    <script src="utils.js"></script>
+    <script src="moves.js"></script>
+    <script src="algorithms.js"></script>
+    <script src="firstLayer.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+        // Global cube state
+        let currentCube = null;
+
+        function performMoveAndDisplay(moveName) {
+            if (!currentCube) {
+                currentCube = initializeCube();
+            }
+            performMove(moveName, currentCube);
+            displayCubeOutput();
+        }
+
+        function displayCubeOutput() {
+            if (!currentCube) return;
+            const output = document.getElementById('output');
+            output.textContent = displayCube(
+                currentCube.green, 
+                currentCube.white, 
+                currentCube.yellow, 
+                currentCube.red, 
+                currentCube.orange, 
+                currentCube.blue
+            );
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+            document.getElementById('cubeInput').value = '';
+            currentCube = null;
+        }
+
+        // Override solveCube to use global state
+        window.solveCube = function() {
+            currentCube = initializeCube();
+            const userInput = document.getElementById('cubeInput').value;
+            
+            if (userInput.length > 0) {
+                const inputValues = userInput.split('');
+                let index = 0;
+
+                // Parse each face
+                const faces = [
+                    currentCube.green, 
+                    currentCube.white, 
+                    currentCube.yellow, 
+                    currentCube.red, 
+                    currentCube.orange, 
+                    currentCube.blue
+                ];
+                
+                for (let face of faces) {
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            if (index < inputValues.length) {
+                                face[i][j] = inputValues[index];
+                                index++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            displayCubeOutput();
+
+            // Apply a test move (M move as shown in original C++ main.cpp)
+            M(currentCube.green, currentCube.white, currentCube.yellow, currentCube.red, currentCube.orange, currentCube.blue);
+            
+            const output = document.getElementById('output');
+            output.textContent += '\n\nAfter M move:\n';
+            output.textContent += displayCube(
+                currentCube.green, 
+                currentCube.white, 
+                currentCube.yellow, 
+                currentCube.red, 
+                currentCube.orange, 
+                currentCube.blue
+            );
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube 3D Viewer</title>
+    <link rel="stylesheet" href="style3d.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rubik's Cube 3D Viewer</h1>
+            <p>Interactive 3D Representation</p>
+        </header>
+
+        <main>
+            <div class="content-wrapper">
+                <div class="canvas-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <div class="control-section">
+                    <h2>Controls</h2>
+                    <div class="instruction-box">
+                        <p><strong>Mouse Controls:</strong></p>
+                        <ul>
+                            <li>Left Click + Drag: Rotate Cube</li>
+                            <li>Right Click + Drag: Pan</li>
+                            <li>Scroll: Zoom In/Out</li>
+                        </ul>
+                    </div>
+
+                    <div class="button-section">
+                        <h3>Cube Rotations</h3>
+                        <div class="button-grid-3d">
+                            <button onclick="rotateX(Math.PI/2)">Rotate X</button>
+                            <button onclick="rotateY(Math.PI/2)">Rotate Y</button>
+                            <button onclick="rotateZ(Math.PI/2)">Rotate Z</button>
+                            <button onclick="resetView()">Reset View</button>
+                        </div>
+                    </div>
+
+                    <div class="button-section">
+                        <h3>Cube Moves</h3>
+                        <div class="button-grid-3d">
+                            <button onclick="applyMove('R')">R</button>
+                            <button onclick="applyMove('L')">L</button>
+                            <button onclick="applyMove('U')">U</button>
+                            <button onclick="applyMove('F')">F</button>
+                            <button onclick="applyMove('B')">B</button>
+                            <button onclick="applyMove('D')">D</button>
+                        </div>
+                        <div class="button-grid-3d">
+                            <button onclick="applyMove('R\'')">R'</button>
+                            <button onclick="applyMove('L\'')">L'</button>
+                            <button onclick="applyMove('U\'')">U'</button>
+                            <button onclick="applyMove('F\'')">F'</button>
+                            <button onclick="applyMove('B\'')">B'</button>
+                            <button onclick="applyMove('D\'')">D'</button>
+                        </div>
+                    </div>
+
+                    <div class="button-section">
+                        <h3>Cube State</h3>
+                        <div class="button-grid-3d">
+                            <button onclick="shuffle()">Shuffle</button>
+                            <button onclick="resetCube()">Reset</button>
+                            <button onclick="goToSolver()">Go to Solver</button>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <p id="moveCounter">Moves: 0</p>
+                        <p id="fpsCounter">FPS: 60</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Rubik's Cube 3D Viewer. Interactive 3D visualization.</p>
+        </footer>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Cube Module Scripts -->
+    <script src="utils.js"></script>
+    <script src="moves.js"></script>
+    <script src="algorithms.js"></script>
+    <script src="firstLayer.js"></script>
+
+    <!-- 3D Viewer Script -->
+    <script src="cube3d.js"></script>
+</body>
+</html>

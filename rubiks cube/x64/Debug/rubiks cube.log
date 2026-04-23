@@ -1,6 +1,0 @@
-﻿  algorithms.cpp
-  firstLayer.cpp
-  main.cpp
-  moves.cpp
-  Generating Code...
-D:\Other\Workspace\VS\rubiks cube\moves.cpp(312,1): error C4716: 'M': must return a value

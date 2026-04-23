@@ -1,0 +1,282 @@
+/* 3D Cube Viewer Styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.content-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+    background: #1a1a2e;
+}
+
+canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.control-section {
+    width: 320px;
+    background: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.control-section h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.control-section h3 {
+    color: #764ba2;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.instruction-box {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.instruction-box p {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.instruction-box ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.instruction-box li {
+    padding: 5px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.instruction-box li:before {
+    content: "▸ ";
+    color: #667eea;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.button-section {
+    margin-bottom: 15px;
+}
+
+.button-grid-3d {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.button-grid-3d button {
+    padding: 12px 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.button-grid-3d button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.button-grid-3d button:active {
+    transform: translateY(0);
+}
+
+.info-box {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+    border-left: 4px solid #764ba2;
+}
+
+.info-box p {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #333;
+    font-weight: 500;
+}
+
+footer {
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+/* Scrollbar styling */
+.control-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.control-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.control-section::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 3px;
+}
+
+.control-section::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .control-section {
+        width: 280px;
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .button-grid-3d {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .control-section {
+        width: 100%;
+        height: auto;
+        max-height: 40vh;
+        border-left: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .canvas-container {
+        height: 60vh;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.3em;
+    }
+
+    header p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2em;
+    }
+
+    .control-section {
+        max-height: 50vh;
+    }
+
+    .canvas-container {
+        height: 50vh;
+    }
+
+    .button-grid-3d {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+
+    .button-grid-3d button {
+        padding: 10px 6px;
+        font-size: 0.85em;
+    }
+
+    .control-section h3 {
+        font-size: 1em;
+        margin-top: 15px;
+    }
+
+    .instruction-box li {
+        font-size: 0.8em;
+    }
+}
