@@ -5,7 +5,7 @@
  */
 
 // Core PLL Algorithms for CFOP
-const PLL_ALGORITHMS = {
+var PLL_ALGORITHMS = {
     // Corner Permutations (2-Look PLL Step 1)
     Aa_PERM: "x R' D2 R U R' D2 R U' x'",
     Ab_PERM: "x R2 D2 R U R' D2 R U' R x'",
