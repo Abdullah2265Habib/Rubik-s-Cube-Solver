@@ -1,7 +1,7 @@
 /**
  * js/solver/f2l.js
  * CFOP First Two Layers (F2L) Solver Engine.
- * Solves the 4 corner-edge pairs into their respective slots.
+ * Solves all 4 corner-edge pairs into their respective slots while preserving Cross.
  */
 
 if (typeof require !== 'undefined') {
@@ -18,120 +18,87 @@ function solveF2L(initialCube) {
     if (isF2LSolved(cube)) return [];
 
     const f2lMoves = [];
-    // 4 Slots: FR (Green-Orange), FL (Green-Red), BR (Blue-Orange), BL (Blue-Red)
-    const slots = [
-        { name: 'FR', frontColor: 'g', rightColor: 'o', rot: '' },
-        { name: 'FL', frontColor: 'g', rightColor: 'r', rot: 'y' },
-        { name: 'BR', frontColor: 'b', rightColor: 'o', rot: "y'" },
-        { name: 'BL', frontColor: 'b', rightColor: 'r', rot: 'y2' }
-    ];
+    const slots = ['FR', 'FL', 'BR', 'BL'];
 
-    for (let slot of slots) {
-        let moves = solveSingleF2LSlot(cube, slot);
-        f2lMoves.push(...moves);
+    for (let slotName of slots) {
+        if (!isSlotSolved(cube, slotName)) {
+            const moves = solveSlotBFS(cube, slotName, 8);
+            if (moves && moves.length > 0) {
+                for (let m of moves) {
+                    applyMove(cube, m);
+                }
+                f2lMoves.push(...moves);
+            }
+        }
     }
 
     return optimizeMoves(f2lMoves);
 }
 
 /**
- * Solves a single F2L slot.
- */
-function solveSingleF2LSlot(cube, slot) {
-    const moves = [];
-
-    // Check if slot is already solved
-    if (isSlotSolved(cube, slot)) {
-        return moves;
-    }
-
-    // Try finding a direct search sequence to pair and insert (depth 0 to 6)
-    const seq = findSlotSolverBFS(cube, slot, 6);
-    if (seq !== null) {
-        for (let m of seq) {
-            applyMove(cube, m);
-        }
-        return seq;
-    }
-
-    // Fallback: standard CFOP pairing triggers
-    const triggers = [
-        "R U R'",
-        "R U' R'",
-        "R U2 R'",
-        "F' U' F",
-        "F' U F",
-        "R U R' U' R U R'",
-        "U R U' R'",
-        "U' F' U F",
-        "R U' R' U R U' R'",
-        "R U2 R' U R U' R'",
-        "F' U2 F U' F' U F",
-        "R U R' U2 R U' R' U R U' R'",
-        "y R U R'",
-        "y R U' R'",
-        "y' R U R'"
-    ];
-
-    for (let trig of triggers) {
-        let testCube = cloneCube(cube);
-        applyAlgorithm(testCube, trig);
-        if (isSlotSolved(testCube, slot) && isCrossSolved(testCube)) {
-            applyAlgorithm(cube, trig);
-            moves.push(...trig.split(/\s+/));
-            return moves;
-        }
-    }
-
-    return moves;
-}
-
-/**
  * Checks if a specific F2L slot is solved.
  */
-function isSlotSolved(cube, slot) {
-    // Check D face corner for white
+function isSlotSolved(cube, slotName) {
     if (cube.D[1][1] !== 'w') return false;
 
-    if (slot.name === 'FR') {
+    if (slotName === 'FR') {
         return cube.D[0][2] === 'w' &&
                cube.F[2][2] === cube.F[1][1] && cube.F[1][2] === cube.F[1][1] &&
                cube.R[2][0] === cube.R[1][1] && cube.R[1][0] === cube.R[1][1];
     }
-    if (slot.name === 'FL') {
+    if (slotName === 'FL') {
         return cube.D[0][0] === 'w' &&
                cube.F[2][0] === cube.F[1][1] && cube.F[1][0] === cube.F[1][1] &&
                cube.L[2][2] === cube.L[1][1] && cube.L[1][2] === cube.L[1][1];
     }
-    if (slot.name === 'BR') {
+    if (slotName === 'BR') {
         return cube.D[2][2] === 'w' &&
                cube.B[2][0] === cube.B[1][1] && cube.B[1][0] === cube.B[1][1] &&
                cube.R[2][2] === cube.R[1][1] && cube.R[1][2] === cube.R[1][1];
     }
-    if (slot.name === 'BL') {
+    if (slotName === 'BL') {
         return cube.D[2][0] === 'w' &&
                cube.B[2][2] === cube.B[1][1] && cube.B[1][2] === cube.B[1][1] &&
                cube.L[2][0] === cube.L[1][1] && cube.L[1][0] === cube.L[1][1];
     }
-
     return false;
 }
 
 /**
- * BFS search to solve target F2L slot without breaking the White Cross or already solved F2L slots.
+ * Checks if all previously solved F2L slots remain intact.
  */
-function findSlotSolverBFS(startCube, slot, maxDepth) {
-    // Available moves for F2L pairing (U rotations, R/L/F/B slot turns)
-    const allowedMoves = ['U', "U'", 'U2', 'R', "R'", 'R2', 'F', "F'", 'F2', 'L', "L'", 'L2', 'B', "B'", 'B2'];
+function checkSolvedSlotsIntact(cube, currentSlot) {
+    const allSlots = ['FR', 'FL', 'BR', 'BL'];
+    const idx = allSlots.indexOf(currentSlot);
+
+    for (let i = 0; i < idx; i++) {
+        if (!isSlotSolved(cube, allSlots[i])) return false;
+    }
+    return true;
+}
+
+/**
+ * BFS search to solve target F2L slot.
+ */
+function solveSlotBFS(startCube, slotName, maxDepth) {
+    // Select allowed face turns relevant to the slot
+    let allowedMoves = ['U', "U'", 'U2'];
+    if (slotName === 'FR') allowedMoves.push('R', "R'", 'R2', 'F', "F'", 'F2');
+    else if (slotName === 'FL') allowedMoves.push('L', "L'", 'L2', 'F', "F'", 'F2');
+    else if (slotName === 'BR') allowedMoves.push('R', "R'", 'R2', 'B', "B'", 'B2');
+    else if (slotName === 'BL') allowedMoves.push('L', "L'", 'L2', 'B', "B'", 'B2');
 
     let queue = [{ cube: startCube, path: [] }];
 
     for (let depth = 0; depth <= maxDepth; depth++) {
         let nextQueue = [];
         for (let item of queue) {
-            if (isSlotSolved(item.cube, slot) && isCrossSolved(item.cube)) {
+            if (isSlotSolved(item.cube, slotName) &&
+                isCrossSolved(item.cube) &&
+                checkSolvedSlotsIntact(item.cube, slotName)) {
                 return item.path;
             }
+
             if (depth < maxDepth) {
                 for (let m of allowedMoves) {
                     if (item.path.length > 0) {
@@ -141,8 +108,8 @@ function findSlotSolverBFS(startCube, slot, maxDepth) {
                     let nextCube = cloneCube(item.cube);
                     applyMove(nextCube, m);
 
-                    // Must preserve Cross at all times
-                    if (isCrossSolved(nextCube)) {
+                    // Must preserve Cross and prior slots
+                    if (isCrossSolved(nextCube) && checkSolvedSlotsIntact(nextCube, slotName)) {
                         nextQueue.push({ cube: nextCube, path: [...item.path, m] });
                     }
                 }
@@ -151,14 +118,13 @@ function findSlotSolverBFS(startCube, slot, maxDepth) {
         queue = nextQueue;
     }
 
-    return null;
+    return [];
 }
 
 // Export for Node and browser
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         solveF2L,
-        solveSingleF2LSlot,
         isSlotSolved
     };
 }
