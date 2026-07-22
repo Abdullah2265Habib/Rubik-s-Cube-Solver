@@ -5,7 +5,7 @@
  */
 
 // Basic Orientation Trigger Algorithms
-const OLL_TRIGGERS = {
+var OLL_TRIGGERS = {
     SEXY: "R U R' U'",
     LEFT_SEXY: "L' U' L U",
     SUNE: "R U R' U R U2 R'",
@@ -20,8 +20,8 @@ const OLL_TRIGGERS = {
     CROSS_DOT: "F R U R' U' F' f R U R' U' f'"
 };
 
-// Full 57 OLL Algorithms Mapping (Indexed by 8-bit orientation binary pattern or key)
-const OLL_ALGORITHMS = {
+// Full 57 OLL Algorithms Mapping
+var OLL_ALGORITHMS = {
     // 2-Look OLL Edges
     DOT: "F R U R' U' F' f R U R' U' f'",
     LINE: "F R U R' U' F'",

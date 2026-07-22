@@ -165,19 +165,28 @@ function handleTextInputChange() {
  */
 function handleSolveCFOP() {
     const inputArea = document.getElementById('cubeInput');
+    const statusMsg = document.getElementById('statusMsg');
+
     if (inputArea) {
         const cleanStr = sanitizeCubeString(inputArea.value);
         if (cleanStr.length === 54) {
             currentCubeState = stringToCube(cleanStr);
             renderCubeNet();
             update3DCubeState(currentCubeState);
+        } else {
+            if (statusMsg) {
+                statusMsg.textContent = `INPUT LENGTH IS ${cleanStr.length}/54 CHARACTERS`;
+                statusMsg.style.color = "#ff3366";
+            }
+            alert(`Please enter exactly 54 color characters (w, y, g, b, r, o). Current length: ${cleanStr.length}`);
+            return;
         }
     }
 
     const result = solveCFOP(currentCubeState);
     displaySolutionResult(result);
 
-    // Scroll to solution section
+    // Scroll to solution output panel
     const container = document.getElementById('solutionOutput');
     if (container) {
         container.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -224,11 +233,14 @@ function displaySolutionResult(result) {
     `;
 
     for (let step of result.steps) {
+        const isComp = step.completed;
+        const colorStyle = isComp ? 'var(--accent-green)' : 'var(--accent-cyan)';
+
         html += `
             <div class="step-card">
                 <div class="step-header">
                     <span>STEP: ${step.name.toUpperCase()}</span>
-                    <span class="badge-sharp">${step.moveCount} MOVES</span>
+                    <span class="badge-sharp" style="color:${colorStyle}; border-color:${colorStyle}">${step.moveCount} MOVES ${isComp ? '✓' : ''}</span>
                 </div>
                 <div class="move-box">${step.moves.join(' ') || '(0 Moves - Step complete)'}</div>
                 ${step.note ? `<p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">${step.note}</p>` : ''}
