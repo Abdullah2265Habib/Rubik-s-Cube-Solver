@@ -32,6 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * Strips whitespace, newlines, and non-color characters from input string.
+ */
+function sanitizeCubeString(rawStr) {
+    if (!rawStr) return '';
+    return rawStr.replace(/[^wygbroWYGBRO]/g, '').toLowerCase();
+}
+
+/**
  * Builds the 2D Unfolded Cube Net in HTML.
  */
 function renderCubeNet() {
@@ -82,13 +90,10 @@ function setupPalette() {
  */
 function onFaceletClick(faceName, row, col, element) {
     currentCubeState[faceName][row][col] = currentSelectedColor;
-
-    // Update element background class
     element.className = `facelet c-${currentSelectedColor}`;
 
     updateTextAreaFromState();
 
-    // Live Sync check
     const liveSyncEnabled = document.getElementById('chkLiveSync')?.checked;
     if (liveSyncEnabled) {
         update3DCubeState(currentCubeState);
@@ -109,22 +114,27 @@ function updateTextAreaFromState() {
  * Handles "SHOW IN REAL TIME" button click.
  */
 function handleShowRealTime() {
-    try {
-        const inputArea = document.getElementById('cubeInput');
-        if (inputArea && inputArea.value.trim().length === 54) {
-            currentCubeState = stringToCube(inputArea.value);
-            renderCubeNet();
-        }
-        // Update 3D canvas
-        update3DCubeState(currentCubeState);
+    const inputArea = document.getElementById('cubeInput');
+    const statusMsg = document.getElementById('statusMsg');
 
-        const statusMsg = document.getElementById('statusMsg');
-        if (statusMsg) {
-            statusMsg.textContent = "3D View Updated in Real Time!";
-            statusMsg.style.color = "#00f0ff";
+    if (inputArea) {
+        const cleanStr = sanitizeCubeString(inputArea.value);
+        if (cleanStr.length === 54) {
+            currentCubeState = stringToCube(cleanStr);
+            renderCubeNet();
+            update3DCubeState(currentCubeState);
+
+            if (statusMsg) {
+                statusMsg.textContent = "3D VIEW UPDATED IN REAL TIME";
+                statusMsg.style.color = "#00f0ff";
+            }
+        } else {
+            if (statusMsg) {
+                statusMsg.textContent = `INPUT LENGTH IS ${cleanStr.length}/54 CHARACTERS`;
+                statusMsg.style.color = "#ff3366";
+            }
+            alert(`Input error: String contains ${cleanStr.length} valid color characters. Exactly 54 characters (w, y, g, b, r, o) are required.`);
         }
-    } catch (err) {
-        alert("Error parsing cube input: " + err.message);
     }
 }
 
@@ -133,16 +143,19 @@ function handleShowRealTime() {
  */
 function handleTextInputChange() {
     const inputArea = document.getElementById('cubeInput');
-    if (inputArea && inputArea.value.trim().length === 54) {
-        try {
-            currentCubeState = stringToCube(inputArea.value);
-            renderCubeNet();
-            const liveSyncEnabled = document.getElementById('chkLiveSync')?.checked;
-            if (liveSyncEnabled) {
-                update3DCubeState(currentCubeState);
+    if (inputArea) {
+        const cleanStr = sanitizeCubeString(inputArea.value);
+        if (cleanStr.length === 54) {
+            try {
+                currentCubeState = stringToCube(cleanStr);
+                renderCubeNet();
+                const liveSyncEnabled = document.getElementById('chkLiveSync')?.checked;
+                if (liveSyncEnabled) {
+                    update3DCubeState(currentCubeState);
+                }
+            } catch (e) {
+                // ignore partial typing
             }
-        } catch (e) {
-            // ignore partial typing
         }
     }
 }
@@ -151,10 +164,24 @@ function handleTextInputChange() {
  * Handles "SOLVE CFOP" button click.
  */
 function handleSolveCFOP() {
-    handleShowRealTime(); // Ensure state is synced first
+    const inputArea = document.getElementById('cubeInput');
+    if (inputArea) {
+        const cleanStr = sanitizeCubeString(inputArea.value);
+        if (cleanStr.length === 54) {
+            currentCubeState = stringToCube(cleanStr);
+            renderCubeNet();
+            update3DCubeState(currentCubeState);
+        }
+    }
 
     const result = solveCFOP(currentCubeState);
     displaySolutionResult(result);
+
+    // Scroll to solution section
+    const container = document.getElementById('solutionOutput');
+    if (container) {
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 /**
@@ -162,9 +189,14 @@ function handleSolveCFOP() {
  */
 function displaySolutionResult(result) {
     const container = document.getElementById('solutionOutput');
+    const statusMsg = document.getElementById('statusMsg');
     if (!container) return;
 
     if (!result.success) {
+        if (statusMsg) {
+            statusMsg.textContent = "SOLVER ERROR: INVALID CUBE STATE";
+            statusMsg.style.color = "#ff3366";
+        }
         container.innerHTML = `
             <div class="step-card" style="border-color: var(--accent-red)">
                 <div class="step-header" style="color: var(--accent-red)">
@@ -176,11 +208,16 @@ function displaySolutionResult(result) {
         return;
     }
 
+    if (statusMsg) {
+        statusMsg.textContent = `SOLVED IN ${result.totalMoves} MOVES (CFOP)`;
+        statusMsg.style.color = "#00e676";
+    }
+
     let html = `
-        <div class="step-card">
+        <div class="step-card" style="border-color: var(--accent-green)">
             <div class="step-header">
                 <span>CFOP SOLUTION SUMMARY</span>
-                <span class="badge-sharp">${result.totalMoves} MOVES TOTAL</span>
+                <span class="badge-sharp" style="color: var(--accent-green); border-color: var(--accent-green);">${result.totalMoves} MOVES TOTAL</span>
             </div>
             <div class="move-box">${result.allMoves.join(' ') || 'CUBE ALREADY SOLVED'}</div>
         </div>
@@ -212,7 +249,21 @@ function handleResetState() {
     update3DCubeState(currentCubeState);
 
     const container = document.getElementById('solutionOutput');
-    if (container) container.innerHTML = '';
+    if (container) {
+        container.innerHTML = `
+            <div class="step-card">
+                <p style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.9rem;">
+                    Cube reset to initial solved state.
+                </p>
+            </div>
+        `;
+    }
+
+    const statusMsg = document.getElementById('statusMsg');
+    if (statusMsg) {
+        statusMsg.textContent = "SYSTEM READY";
+        statusMsg.style.color = "#00e676";
+    }
 }
 
 /**
@@ -226,4 +277,10 @@ function handlePresetScramble() {
     renderCubeNet();
     updateTextAreaFromState();
     update3DCubeState(currentCubeState);
+
+    const statusMsg = document.getElementById('statusMsg');
+    if (statusMsg) {
+        statusMsg.textContent = "SCRAMBLE APPLIED";
+        statusMsg.style.color = "#ffd600";
+    }
 }
