@@ -4,6 +4,12 @@
  * Solves the Rubik's Cube step-by-step using CFOP (Cross -> F2L -> OLL -> PLL).
  */
 
+// Variable declarations for hosting/importing
+var cloneCube, isCubeSolved, isCrossSolved, isF2LSolved, validateCubeState;
+var applyMove, applyAlgorithm, optimizeMoves;
+var solveCross, solveF2L;
+var getOLLAlgorithm, OLL_ALGORITHMS, getPLLAlgorithm, PLL_ALGORITHMS;
+
 if (typeof require !== 'undefined') {
     var _cubeModule = require('../core/cube.js');
     var _movesModule = require('../core/moves.js');
@@ -12,23 +18,43 @@ if (typeof require !== 'undefined') {
     var _ollModule = require('./orientation.js');
     var _pllModule = require('./permutation.js');
 
-    var cloneCube = _cubeModule.cloneCube;
-    var isCubeSolved = _cubeModule.isCubeSolved;
-    var isCrossSolved = _cubeModule.isCrossSolved;
-    var isF2LSolved = _cubeModule.isF2LSolved;
-    var validateCubeState = _cubeModule.validateCubeState;
+    cloneCube = _cubeModule.cloneCube;
+    isCubeSolved = _cubeModule.isCubeSolved;
+    isCrossSolved = _cubeModule.isCrossSolved;
+    isF2LSolved = _cubeModule.isF2LSolved;
+    validateCubeState = _cubeModule.validateCubeState;
 
-    var applyMove = _movesModule.applyMove;
-    var applyAlgorithm = _movesModule.applyAlgorithm;
-    var optimizeMoves = _movesModule.optimizeMoves;
+    applyMove = _movesModule.applyMove;
+    applyAlgorithm = _movesModule.applyAlgorithm;
+    optimizeMoves = _movesModule.optimizeMoves;
 
-    var solveCross = _crossModule.solveCross;
-    var solveF2L = _f2lModule.solveF2L;
+    solveCross = _crossModule.solveCross;
+    solveF2L = _f2lModule.solveF2L;
 
-    var getOLLAlgorithm = _ollModule.getOLLAlgorithm;
-    var OLL_ALGORITHMS = _ollModule.OLL_ALGORITHMS;
-    var getPLLAlgorithm = _pllModule.getPLLAlgorithm;
-    var PLL_ALGORITHMS = _pllModule.PLL_ALGORITHMS;
+    getOLLAlgorithm = _ollModule.getOLLAlgorithm;
+    OLL_ALGORITHMS = _ollModule.OLL_ALGORITHMS;
+    getPLLAlgorithm = _pllModule.getPLLAlgorithm;
+    PLL_ALGORITHMS = _pllModule.PLL_ALGORITHMS;
+} else {
+    // In browser, fall back to global scope (window or globalThis) variables
+    var g = (typeof window !== 'undefined') ? window : (typeof globalThis !== 'undefined' ? globalThis : {});
+    cloneCube = g.cloneCube;
+    isCubeSolved = g.isCubeSolved;
+    isCrossSolved = g.isCrossSolved;
+    isF2LSolved = g.isF2LSolved;
+    validateCubeState = g.validateCubeState;
+
+    applyMove = g.applyMove;
+    applyAlgorithm = g.applyAlgorithm;
+    optimizeMoves = g.optimizeMoves;
+
+    solveCross = g.solveCross;
+    solveF2L = g.solveF2L;
+
+    getOLLAlgorithm = g.getOLLAlgorithm;
+    OLL_ALGORITHMS = g.OLL_ALGORITHMS;
+    getPLLAlgorithm = g.getPLLAlgorithm;
+    PLL_ALGORITHMS = g.PLL_ALGORITHMS;
 }
 
 /**
@@ -102,12 +128,21 @@ function solveCFOP(startCube) {
     }
 
     // Step 3: Orientation of Last Layer (OLL)
-    const ollStatus = checkOLLStatus(current);
-    if (!ollStatus.solved) {
-        let ollAlg = ollStatus.algorithm || (typeof getOLLAlgorithm === 'function' ? getOLLAlgorithm("CORNER") : "F R U R' U' F'");
-        const ollMoves = ollAlg ? ollAlg.split(/\s+/) : [];
-        for (let m of ollMoves) {
-            applyMove(current, m);
+    if (!isOLLSolved(current)) {
+        const ollMoves = [];
+        const edgeMoves = solveOllEdges(current);
+        if (edgeMoves && edgeMoves.length > 0) {
+            for (let m of edgeMoves) {
+                applyMove(current, m);
+            }
+            ollMoves.push(...edgeMoves);
+        }
+        const cornerMoves = solveOllCorners(current);
+        if (cornerMoves && cornerMoves.length > 0) {
+            for (let m of cornerMoves) {
+                applyMove(current, m);
+            }
+            ollMoves.push(...cornerMoves);
         }
         allMoves.push(...ollMoves);
         steps.push({
@@ -115,7 +150,7 @@ function solveCFOP(startCube) {
             moves: ollMoves,
             moveCount: ollMoves.length,
             cubeState: cloneCube(current),
-            completed: checkOLLStatus(current).solved
+            completed: isOLLSolved(current)
         });
     } else {
         steps.push({
@@ -130,13 +165,13 @@ function solveCFOP(startCube) {
 
     // Step 4: Permutation of Last Layer (PLL)
     if (!isCubeSolved(current)) {
-        const pllStatus = checkPLLStatus(current);
-        let pllAlg = pllStatus.algorithm || (typeof getPLLAlgorithm === 'function' ? getPLLAlgorithm("T_PERM") : "R U R' U' R' F R2 U' R' U' R U R' F'");
-        const pllMoves = pllAlg ? pllAlg.split(/\s+/) : [];
-        for (let m of pllMoves) {
-            applyMove(current, m);
+        const pllMoves = solvePll(current) || [];
+        if (pllMoves.length > 0) {
+            for (let m of pllMoves) {
+                applyMove(current, m);
+            }
+            allMoves.push(...pllMoves);
         }
-        allMoves.push(...pllMoves);
         steps.push({
             name: "Permutation of Last Layer (PLL)",
             moves: pllMoves,
@@ -163,41 +198,153 @@ function solveCFOP(startCube) {
         totalMoves: allMoves.length,
         allMoves: allMoves,
         finalState: current,
-        solved: isCubeSolved(current) || isF2LSolved(current)
+        solved: isCubeSolved(current)
     };
 }
 
 /**
- * Checks if top layer face (Yellow) is fully oriented.
+ * Checks if the entire top layer face (Yellow) is fully oriented.
  */
-function checkOLLStatus(cube) {
+function isOLLSolved(cube) {
     const topColor = cube.U[1][1];
-    let allOriented = true;
-
     for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
-            if (cube.U[r][c] !== topColor) {
-                allOriented = false;
-                break;
+            if (cube.U[r][c] !== topColor) return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Checks if the four edges on the U face are oriented.
+ */
+function isEdgesOriented(cube) {
+    const topColor = cube.U[1][1];
+    return cube.U[0][1] === topColor &&
+           cube.U[1][0] === topColor &&
+           cube.U[1][2] === topColor &&
+           cube.U[2][1] === topColor;
+}
+
+/**
+ * Solves OLL Step 1 (Edge Orientation).
+ */
+function solveOllEdges(cube) {
+    if (isEdgesOriented(cube)) {
+        return [];
+    }
+
+    const aufChoices = ["", "U", "U2", "U'"];
+    const algChoices = [
+        { name: "LINE", alg: OLL_ALGORITHMS.LINE },
+        { name: "CORNER", alg: OLL_ALGORITHMS.CORNER },
+        { name: "DOT", alg: OLL_ALGORITHMS.DOT }
+    ];
+
+    for (let auf of aufChoices) {
+        for (let choice of algChoices) {
+            let temp = cloneCube(cube);
+            let moves = [];
+            if (auf) {
+                applyMove(temp, auf);
+                moves.push(auf);
+            }
+            applyAlgorithm(temp, choice.alg);
+            moves.push(...choice.alg.split(/\s+/));
+
+            if (isEdgesOriented(temp)) {
+                return moves;
             }
         }
     }
 
-    if (allOriented) {
-        return { solved: true, algorithm: "" };
-    }
-
-    let alg = typeof getOLLAlgorithm === 'function' ? getOLLAlgorithm("LINE") : "F R U R' U' F'";
-    return { solved: false, algorithm: alg };
+    return [];
 }
 
 /**
- * Checks PLL permutation state.
+ * Solves OLL Step 2 (Corner Orientation).
  */
-function checkPLLStatus(cube) {
-    if (isCubeSolved(cube)) return { solved: true, algorithm: "" };
-    let alg = typeof getPLLAlgorithm === 'function' ? getPLLAlgorithm("T_PERM") : "R U R' U' R' F R2 U' R' U' R U R' F'";
-    return { solved: false, algorithm: alg };
+function solveOllCorners(cube) {
+    if (isOLLSolved(cube)) {
+        return [];
+    }
+
+    const aufChoices = ["", "U", "U2", "U'"];
+    const algChoices = [
+        { name: "OLL_21_CROSS_H", alg: OLL_ALGORITHMS.OLL_21_CROSS_H },
+        { name: "OLL_22_CROSS_PI", alg: OLL_ALGORITHMS.OLL_22_CROSS_PI },
+        { name: "OLL_23_HEADLIGHTS", alg: OLL_ALGORITHMS.OLL_23_HEADLIGHTS },
+        { name: "OLL_24_CHAMELEON", alg: OLL_ALGORITHMS.OLL_24_CHAMELEON },
+        { name: "OLL_25_BOWTIE", alg: OLL_ALGORITHMS.OLL_25_BOWTIE },
+        { name: "OLL_26_ANTI_SUNE", alg: OLL_ALGORITHMS.OLL_26_ANTI_SUNE },
+        { name: "OLL_27_SUNE", alg: OLL_ALGORITHMS.OLL_27_SUNE }
+    ];
+
+    for (let auf of aufChoices) {
+        for (let choice of algChoices) {
+            let temp = cloneCube(cube);
+            let moves = [];
+            if (auf) {
+                applyMove(temp, auf);
+                moves.push(auf);
+            }
+            applyAlgorithm(temp, choice.alg);
+            moves.push(...choice.alg.split(/\s+/));
+
+            if (isOLLSolved(temp)) {
+                return moves;
+            }
+        }
+    }
+
+    return [];
+}
+
+/**
+ * Solves Permutation of Last Layer (PLL).
+ */
+function solvePll(cube) {
+    if (isCubeSolved(cube)) {
+        return [];
+    }
+
+    const aufChoices = ["", "U", "U2", "U'"];
+
+    // First check if just an AUF solves the cube
+    for (let auf of aufChoices) {
+        let temp = cloneCube(cube);
+        if (auf) applyMove(temp, auf);
+        if (isCubeSolved(temp)) {
+            return auf ? [auf] : [];
+        }
+    }
+
+    // Try all PLL algorithms with all combinations of auf1 and auf2
+    for (let key in PLL_ALGORITHMS) {
+        const alg = PLL_ALGORITHMS[key];
+        for (let auf1 of aufChoices) {
+            for (let auf2 of aufChoices) {
+                let temp = cloneCube(cube);
+                let moves = [];
+                if (auf1) {
+                    applyMove(temp, auf1);
+                    moves.push(auf1);
+                }
+                applyAlgorithm(temp, alg);
+                moves.push(...alg.split(/\s+/));
+                if (auf2) {
+                    applyMove(temp, auf2);
+                    moves.push(auf2);
+                }
+
+                if (isCubeSolved(temp)) {
+                    return moves;
+                }
+            }
+        }
+    }
+
+    return [];
 }
 
 // Export for Node and browser
