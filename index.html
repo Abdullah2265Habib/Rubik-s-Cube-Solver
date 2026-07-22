@@ -4,141 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rubik's Cube Solver - CFOP Method</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Classic Sharp Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Three.js 3D Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Rubik's Cube Solver</h1>
-            <p>CFOP Method Solver</p>
-        </header>
 
-        <main>
-            <div class="input-section">
-                <h2>Enter Cube State</h2>
-                <p>Enter the cube state as 54 characters (9 per face):</p>
-                <p>Format: Green (9) + White (9) + Yellow (9) + Red (9) + Orange (9) + Blue (9)</p>
-                <textarea id="cubeInput" placeholder="Enter 54 characters representing the cube state" rows="6" cols="60"></textarea>
-                <div class="button-group">
-                    <button onclick="solveCube()">Solve Cube</button>
-                    <button onclick="clearOutput()">Clear</button>
+    <!-- Header Bar -->
+    <header>
+        <div>
+            <h1>RUBIK'S CUBE SOLVER</h1>
+            <div class="subtitle">CFOP METHOD &bull; REAL-TIME 3D VISUALIZER</div>
+        </div>
+        <div id="statusMsg" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-green);">
+            SYSTEM READY
+        </div>
+    </header>
+
+    <!-- Main Dual Panel Layout -->
+    <div class="main-layout">
+
+        <!-- Left Panel: Input & Controls -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">1. INPUT CUBE STATE</div>
+            </div>
+
+            <!-- Color Palette Selector -->
+            <div class="palette-container">
+                <span class="palette-label">ACTIVE COLOR:</span>
+                <div class="color-palette">
+                    <div class="color-swatch c-w active" data-color="w" title="White"></div>
+                    <div class="color-swatch c-y" data-color="y" title="Yellow"></div>
+                    <div class="color-swatch c-g" data-color="g" title="Green"></div>
+                    <div class="color-swatch c-b" data-color="b" title="Blue"></div>
+                    <div class="color-swatch c-r" data-color="r" title="Red"></div>
+                    <div class="color-swatch c-o" data-color="o" title="Orange"></div>
                 </div>
             </div>
 
-            <div class="moves-section">
-                <h2>Manual Moves</h2>
-                <div class="button-grid">
-                    <button onclick="performMoveAndDisplay('R')">R</button>
-                    <button onclick="performMoveAndDisplay('L')">L</button>
-                    <button onclick="performMoveAndDisplay('U')">U</button>
-                    <button onclick="performMoveAndDisplay('F')">F</button>
-                    <button onclick="performMoveAndDisplay('R\'')">R'</button>
-                    <button onclick="performMoveAndDisplay('L\'')">L'</button>
-                    <button onclick="performMoveAndDisplay('U\'')">U'</button>
-                    <button onclick="performMoveAndDisplay('F\'')">F'</button>
-                    <button onclick="performMoveAndDisplay('x')">x</button>
-                    <button onclick="performMoveAndDisplay('y')">y</button>
-                    <button onclick="performMoveAndDisplay('M')">M</button>
-                    <button onclick="performMoveAndDisplay('M\'')">M'</button>
-                </div>
+            <!-- 2D Unfolded Interactive Net -->
+            <div class="cube-net-wrapper">
+                <div class="cube-net" id="cubeNet"></div>
             </div>
 
-            <div class="output-section">
-                <h2>Output</h2>
-                <pre id="output"></pre>
+            <!-- 54-Char Textarea Input -->
+            <div class="input-group">
+                <span class="input-label">RAW 54-CHARACTER STATE (U, L, F, R, B, D):</span>
+                <textarea id="cubeInput" class="sharp-input" rows="3" placeholder="54-character state string..."></textarea>
             </div>
-        </main>
 
-        <footer>
-            <p>&copy; 2024 Rubik's Cube Solver. Converted from C++ to JavaScript.</p>
-        </footer>
+            <!-- Controls & Action Buttons -->
+            <div class="button-row">
+                <button id="btnRealTime" class="btn-sharp btn-realtime">&blackright; SHOW IN REAL TIME</button>
+                <button id="btnSolveCFOP" class="btn-sharp btn-solve">&check; SOLVE CFOP</button>
+            </div>
+
+            <div class="button-row">
+                <button id="btnScramble" class="btn-sharp btn-outline">SCRAMBLE</button>
+                <button id="btnResetState" class="btn-sharp btn-outline">RESET</button>
+                <label class="toggle-label">
+                    <input type="checkbox" id="chkLiveSync" checked> LIVE SYNC 3D
+                </label>
+            </div>
+        </div>
+
+        <!-- Right Panel: Real-Time 3D Viewport -->
+        <div class="panel viewport-panel">
+            <div class="panel-header">
+                <div class="panel-title">2. REAL-TIME 3D VIEWPORT</div>
+                <button id="btnResetView" class="btn-sharp btn-outline" style="padding: 4px 10px; font-size: 0.75rem;">RESET VIEW</button>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="cubeCanvas"></canvas>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Script imports -->
-    <script src="utils.js"></script>
-    <script src="moves.js"></script>
-    <script src="algorithms.js"></script>
-    <script src="firstLayer.js"></script>
-    <script src="main.js"></script>
+    <!-- Bottom Panel: CFOP Solution Output -->
+    <div class="solution-panel">
+        <div class="panel-header">
+            <div class="panel-title">3. CFOP SOLUTION BREAKDOWN</div>
+        </div>
 
-    <script>
-        // Global cube state
-        let currentCube = null;
+        <div id="solutionOutput">
+            <div class="step-card">
+                <p style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.9rem;">
+                    Enter cube state or scramble above, then click <strong>"SOLVE CFOP"</strong> to view step-by-step solution.
+                </p>
+            </div>
+        </div>
+    </div>
 
-        function performMoveAndDisplay(moveName) {
-            if (!currentCube) {
-                currentCube = initializeCube();
-            }
-            performMove(moveName, currentCube);
-            displayCubeOutput();
-        }
-
-        function displayCubeOutput() {
-            if (!currentCube) return;
-            const output = document.getElementById('output');
-            output.textContent = displayCube(
-                currentCube.green, 
-                currentCube.white, 
-                currentCube.yellow, 
-                currentCube.red, 
-                currentCube.orange, 
-                currentCube.blue
-            );
-        }
-
-        function clearOutput() {
-            document.getElementById('output').textContent = '';
-            document.getElementById('cubeInput').value = '';
-            currentCube = null;
-        }
-
-        // Override solveCube to use global state
-        window.solveCube = function() {
-            currentCube = initializeCube();
-            const userInput = document.getElementById('cubeInput').value;
-            
-            if (userInput.length > 0) {
-                const inputValues = userInput.split('');
-                let index = 0;
-
-                // Parse each face
-                const faces = [
-                    currentCube.green, 
-                    currentCube.white, 
-                    currentCube.yellow, 
-                    currentCube.red, 
-                    currentCube.orange, 
-                    currentCube.blue
-                ];
-                
-                for (let face of faces) {
-                    for (let i = 0; i < 3; i++) {
-                        for (let j = 0; j < 3; j++) {
-                            if (index < inputValues.length) {
-                                face[i][j] = inputValues[index];
-                                index++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            displayCubeOutput();
-
-            // Apply a test move (M move as shown in original C++ main.cpp)
-            M(currentCube.green, currentCube.white, currentCube.yellow, currentCube.red, currentCube.orange, currentCube.blue);
-            
-            const output = document.getElementById('output');
-            output.textContent += '\n\nAfter M move:\n';
-            output.textContent += displayCube(
-                currentCube.green, 
-                currentCube.white, 
-                currentCube.yellow, 
-                currentCube.red, 
-                currentCube.orange, 
-                currentCube.blue
-            );
-        };
-    </script>
+    <!-- Application Script Imports -->
+    <script src="js/core/cube.js"></script>
+    <script src="js/core/moves.js"></script>
+    <script src="js/solver/orientation.js"></script>
+    <script src="js/solver/permutation.js"></script>
+    <script src="js/solver/cross.js"></script>
+    <script src="js/solver/f2l.js"></script>
+    <script src="js/solver/cfopSolver.js"></script>
+    <script src="js/view/cube3d.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
