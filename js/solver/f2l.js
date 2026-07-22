@@ -1,6 +1,6 @@
 /**
  * js/solver/f2l.js
- * CFOP First Two Layers (F2L) Solver Engine with memory-efficient search.
+ * CFOP First Two Layers (F2L) Solver Engine with fast search limits.
  */
 
 if (typeof require !== 'undefined') {
@@ -20,7 +20,7 @@ function solveF2L(initialCube) {
 
     for (let slotName of slots) {
         if (!isSlotSolved(cube, slotName)) {
-            const moves = solveSlotBFS(cube, slotName, 5);
+            const moves = solveSingleSlot(cube, slotName);
             if (moves && moves.length > 0) {
                 for (let m of moves) {
                     applyMove(cube, m);
@@ -72,9 +72,40 @@ function checkSolvedSlotsIntact(cube, currentSlot) {
     return true;
 }
 
-/**
- * Fast BFS search up to maxDepth with visited set to prevent high memory usage.
- */
+function solveSingleSlot(cube, slotName) {
+    // 1. Fast BFS (depth 4)
+    const bfsMoves = solveSlotBFS(cube, slotName, 4);
+    if (bfsMoves.length > 0) return bfsMoves;
+
+    // 2. Fallback triggers
+    const triggers = getTriggersForSlot(slotName);
+    for (let trig of triggers) {
+        let testCube = cloneCube(cube);
+        applyAlgorithm(testCube, trig);
+        if (isSlotSolved(testCube, slotName) && isCrossSolved(testCube) && checkSolvedSlotsIntact(testCube, slotName)) {
+            return trig.trim().split(/\s+/);
+        }
+    }
+
+    return [];
+}
+
+function getTriggersForSlot(slotName) {
+    if (slotName === 'FR') {
+        return ["R U R'", "R U' R'", "R U2 R'", "F' U' F", "F' U F", "U R U' R'", "U' F' U F", "R U R' U' R U R'"];
+    }
+    if (slotName === 'FL') {
+        return ["L' U' L", "L' U L", "L' U2 L", "F U F'", "F U' F'", "U' L' U L", "U F U' F'", "L' U' L U L' U' L"];
+    }
+    if (slotName === 'BR') {
+        return ["R' U' R", "R' U R", "R' U2 R", "B U B'", "B U' B'", "U' R' U R", "U B U' B'", "R' U' R U R' U' R"];
+    }
+    if (slotName === 'BL') {
+        return ["L U L'", "L U' L'", "L U2 L'", "B' U' B", "B' U B", "U L U' L'", "U' B' U B", "L U L' U' L U L'"];
+    }
+    return [];
+}
+
 function solveSlotBFS(startCube, slotName, maxDepth) {
     let allowedMoves = ['U', "U'", 'U2'];
     if (slotName === 'FR') allowedMoves.push('R', "R'", 'R2', 'F', "F'", 'F2');
@@ -118,7 +149,6 @@ function solveSlotBFS(startCube, slotName, maxDepth) {
     return [];
 }
 
-// Export for Node and browser
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         solveF2L,
