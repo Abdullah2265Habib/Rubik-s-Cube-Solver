@@ -259,11 +259,7 @@ textarea.sharp-input:focus {
     background: rgba(0, 230, 118, 0.05);
 }
 
-.btn-sharp.btn-solve:hover {
-    background: var(--accent-green);
-    color: var(--bg-dark);
-    box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
-}
+
 
 .btn-sharp.btn-outline {
     border: 1px solid var(--text-muted);
